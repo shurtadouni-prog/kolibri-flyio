@@ -1,0 +1,16 @@
+app = "kolibri-demo"
+primary_region = "iad"
+
+[env]
+  PYTHONUNBUFFERED = "1"
+
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+
+  [[services.ports]]
+    port = 80
+
+[mounts]
+  source="kolibri_data"
+  destination="/root/.kolibri"
