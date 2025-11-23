@@ -8,12 +8,23 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      # 1. Obtener el contenido del repositorio
       - uses: actions/checkout@v3
 
+      # 2. Instalar Flyctl en el runner
       - name: Install Flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - name: Deploy to Fly.io
+      # 3. Crear volumen persistente (si no existe)
+      - name: Create Volume
+        run: |
+          flyctl volumes create kolibri_data --size 5 || echo "Volume already exists"
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+      # 4. Deploy de Kolibri
+      - name: Deploy Kolibri
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
